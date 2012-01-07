@@ -95,6 +95,19 @@ describe 'jenkins' do
     end
   end
 
+  describe 'Test source installation' do
+    let(:params) { {:install => 'source' , :install_source => 'http://example42.com/jenkins.war' } }
+
+    it { should_not contain_package('jenkins').with_ensure('present') }
+    it { should_not contain_service('jenkins').with_ensure('running') }
+    it { should_not contain_service('jenkins').with_enable('true') }
+    it { should_not contain_file('jenkins.conf').with_ensure('present') }
+    it 'should generate a netinstall define' do
+      content = catalogue.resource('stdlib42::netinstall', 'jenkins').send(:parameters)[:url]
+      content.should == 'http://example42.com/jenkins.war'
+    end
+  end
+
   describe 'Test customizations - template' do
     let(:params) { {:template => "jenkins/spec.erb" , :options => { 'opt_a' => 'value_a' } } }
 

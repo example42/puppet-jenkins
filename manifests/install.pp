@@ -24,7 +24,7 @@ class jenkins::install inherits jenkins {
     }
 
     source: {
-      netinstall { 'netinstall_jenkins':
+      stdlib42::netinstall { 'jenkins':
         url                 => $jenkins::install_source,
         destination_dir     => $jenkins::install_destination,
         extract_command     => 'rsync',
