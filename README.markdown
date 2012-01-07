@@ -60,12 +60,12 @@ For example, the variable "$jenkins_absent" is equivant to the "absent =>" param
   The following parameters apply both for "source" and "puppi" install methods.
   Puppi method may be used to manage deployment updates (given the $install_source is updated).
   By default install_source is set to upstream developer and install_destination to Web (App) server document root
-  Pre and post installation commands may be already defined (check foo_webapp/manifests/params.pp) override them only if needed.
+  Pre and post installation commands may be already defined (check jenkins/manifests/params.pp) override them only if needed.
   Url_check and url_pattern are used for application checks, if monitor is enabled. Override only if needed.
 
-        class { "foo_webapp":
+        class { "jenkins":
           install             => "source",
-          install_source      => "http://deploy.example42.com/foo_webapp/foo_webapp.tar.gz",
+          install_source      => "http://deploy.example42.com/jenkins.war",
           install_destination => "/opt/apps/",
           # install_precommand  => "...",
           # install_postcommand => "...",

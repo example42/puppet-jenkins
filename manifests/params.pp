@@ -19,7 +19,7 @@ class jenkins::params {
 
   # Install source from the upstream provider is updated to module's
   # last update time. You may need to change this:
-  # use the "install_source" parameter of the foo_webapp class
+  # use the "install_source" parameter of the jenkins class
   $install_source = 'http://mirrors.jenkins-ci.org/war/latest/jenkins.war'
 
   # By default we use Tomcat application server as installed by its package

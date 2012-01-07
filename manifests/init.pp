@@ -14,27 +14,27 @@
 #     - puppi   : Installs jenkins war via Puppi
 #
 # [*install_source*]
-#   The URL from where to retrieve the source tarball/zip.
+#   The URL from where to retrieve the source war.
 #   Used if install => "source" or "puppi"
 #   Default is from upstream developer site. Update the version when needed.
 #
 # [*install_destination*]
-#   The base path where to extract the source tarball/zip.
+#   The base path where to extract the source war.
 #   Used if install => "source" or "puppi"
 #   By default is the distro's default webapps directory
 #
 # [*install_precommand*]
-#   A custom command to execute before installing the source tarball/zip.
+#   A custom command to execute before installing the source war.
 #   Used if install => "source" or "puppi"
 #   Check jenkins/manifests/params.pp before overriding the default settings
 #
 # [*install_postcommand*]
-#   A custom command to execute after installing the source tarball/zip.
+#   A custom command to execute after installing the source war.
 #   Used if install => "source" or "puppi"
 #   Check jenkins/manifests/params.pp before overriding the default settings
 #
 # [*url_check*]
-#   An url of foo_webapp application to test the correct deployment of jenkins.
+#   An url to test the correct deployment of jenkins.
 #   Used is monitor is enabled.
 #
 # [*url_pattern*]
