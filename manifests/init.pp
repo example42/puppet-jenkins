@@ -274,36 +274,36 @@ class jenkins (
   $protocol            = $jenkins::params::protocol
   ) inherits jenkins::params {
 
-  validate_bool(  $source_dir_purge ,
-                  $absent ,
-                  $disable ,
-                  $disableboot ,
-                  $monitor ,
-                  $puppi ,
-                  $firewall ,
-                  $debug ,
-                  $audit_only )
+  $bool_source_dir_purge=any2bool($source_dir_purge)
+  $bool_absent=any2bool($absent)
+  $bool_disable=any2bool($disable)
+  $bool_disableboot=any2bool($disableboot)
+  $bool_monitor=any2bool($monitor)
+  $bool_puppi=any2bool($puppi)
+  $bool_firewall=any2bool($firewall)
+  $bool_debug=any2bool($debug)
+  $bool_audit_only=any2bool($audit_only)
 
   ### Definition of some variables used in the module
-  $manage_package = $jenkins::absent ? {
+  $manage_package = $jenkins::bool_absent ? {
     true  => 'absent',
     false => 'present',
   }
 
-  $manage_service_enable = $jenkins::disableboot ? {
+  $manage_service_enable = $jenkins::bool_disableboot ? {
     true    => false,
-    default => $jenkins::disable ? {
+    default => $jenkins::bool_disable ? {
       true    => false,
-      default => $jenkins::absent ? {
+      default => $jenkins::bool_absent ? {
         true  => false,
         false => true,
       },
     },
   }
 
-  $manage_service_ensure = $jenkins::disable ? {
+  $manage_service_ensure = $jenkins::bool_disable ? {
     true    => 'stopped',
-    default =>  $jenkins::absent ? {
+    default =>  $jenkins::bool_absent ? {
       true    => 'stopped',
       default => 'running',
     },
@@ -315,30 +315,29 @@ class jenkins (
     default => false,
   }
 
-  $manage_file = $jenkins::absent ? {
+  $manage_file = $jenkins::bool_absent ? {
     true    => 'absent',
     default => 'present',
   }
 
-  # If $jenkins::disable == true we dont check jenkins on the local system
-  if $jenkins::absent == true or $jenkins::disable == true or $jenkins::disableboot == true {
+  if $jenkins::bool_absent == true or $jenkins::bool_disable == true or $jenkins::bool_disableboot == true {
     $manage_monitor = false
   } else {
     $manage_monitor = true
   }
 
-  if $jenkins::absent == true or $jenkins::disable == true {
+  if $jenkins::bool_absent == true or $jenkins::bool_disable == true {
     $manage_firewall = false
   } else {
     $manage_firewall = true
   }
 
-  $manage_audit = $jenkins::audit_only ? {
+  $manage_audit = $jenkins::bool_audit_only ? {
     true  => 'all',
     false => undef,
   }
 
-  $manage_file_replace = $jenkins::audit_only ? {
+  $manage_file_replace = $jenkins::bool_audit_only ? {
     true  => false,
     false => true,
   }
@@ -407,7 +406,7 @@ class jenkins (
 
 
   ### Provide puppi data, if enabled ( puppi => true )
-  if $jenkins::puppi == true {
+  if $jenkins::bool_puppi == true {
     $puppivars=get_class_args()
     file { 'puppi_jenkins':
       ensure  => $jenkins::manage_file,
@@ -422,7 +421,7 @@ class jenkins (
 
 
   ### Service monitoring, if enabled ( monitor => true )
-  if $jenkins::monitor == true and $jenkins::url_check != '' {
+  if $jenkins::bool_monitor == true and $jenkins::url_check != '' {
     monitor::url { 'jenkins_url':
       url     => $jenkins::url_check,
       pattern => $jenkins::url_pattern,
@@ -434,7 +433,7 @@ class jenkins (
   }
 
   ### Service monitoring, if enabled ( monitor => true ) and present
-  if $jenkins::monitor == true and $jenkins::manage_service_standalone == true {
+  if $jenkins::bool_monitor == true and $jenkins::manage_service_standalone == true {
     monitor::port { "jenkins_${jenkins::protocol}_${jenkins::port}":
       protocol => $jenkins::protocol,
       port     => $jenkins::port,
@@ -453,7 +452,7 @@ class jenkins (
 
 
   ### Firewall management, if enabled ( firewall => true ) and service present
-  if $jenkins::firewall == true and $jenkins::manage_service_standalone == true {
+  if $jenkins::bool_firewall == true and $jenkins::manage_service_standalone == true {
     firewall { "jenkins_${jenkins::protocol}_${jenkins::port}":
       source      => $jenkins::firewall_source,
       destination => $jenkins::firewall_destination,
@@ -468,7 +467,7 @@ class jenkins (
 
 
   ### Debugging, if enabled ( debug => true )
-  if $jenkins::debug == true {
+  if $jenkins::bool_debug == true {
     file { 'debug_jenkins':
       ensure  => $jenkins::manage_file,
       path    => "${settings::vardir}/debug-jenkins",

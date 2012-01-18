@@ -120,7 +120,7 @@ class jenkins::params {
   }
 
   $port = $::jenkins_port ? {
-    ''      => '42',                    # Default value
+    ''      => '8080',                  # Default value
     default => $::jenkins_port,
   }
 
