@@ -17,7 +17,7 @@ define jenkins::plugin ( $version ='') {
 
   exec { "download-jenkins-${name}" :
       command  => "wget --no-check-certificate ${base_url}${plugin}",
-      cwd      => ${plugin_dir}",
+      cwd      => $plugin_dir,
       require  => File["${plugin_dir}"],
       path     => ["/usr/bin", "/usr/sbin",],
       user     => "jenkins",
