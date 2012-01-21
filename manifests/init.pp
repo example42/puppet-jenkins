@@ -56,7 +56,7 @@
 #   Can be defined also by the (top scope) variable $jenkins_source
 #
 # [*source_dir*]
-#   If defined, the whole jenkins configuration direrctory content is retrieved
+#   If defined, the whole jenkins configuration directory content is retrieved
 #   recursively from the specified source
 #   (source => $source_dir , recurse => true)
 #   Can be defined also by the (top scope) variable $jenkins_source_dir
