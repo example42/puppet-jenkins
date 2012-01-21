@@ -110,7 +110,7 @@ For example, the variable "$jenkins_absent" is equivant to the "absent =>" param
 
         class { "jenkins":
           source_dir       => "puppet:///modules/lab42/jenkins/conf/",
-          source_dir_purge => false, # Set to true to purge any existing file not present in $source_dir
+          source_dir_purge => false, # Set to true to purge any existing file not present in $source_dir
         }
 
 * Use custom template for main config file 

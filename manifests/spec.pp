@@ -12,7 +12,7 @@
 class jenkins::spec inherits jenkins {
 
   # This just a test to override the arguments of an existing resource
-  # Note that you can achieve this same result with just:
+  # Note that you can achieve this same result with just:
   # class { "jenkins": template => "jenkins/spec.erb" }
 
   File['jenkins.conf'] {

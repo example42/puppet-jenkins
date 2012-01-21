@@ -1,4 +1,4 @@
-# Class: jenkins
+# = Class: jenkins
 #
 # This is the main jenkins class
 #
@@ -309,7 +309,7 @@ class jenkins (
     },
   }
 
-  # We assume that is installed via package, jenkins has an indipendent service
+  # We assume that is installed via package, jenkins has an indipendent service
   $manage_service_standalone = $jenkins::install ? {
     package => true,
     default => false,

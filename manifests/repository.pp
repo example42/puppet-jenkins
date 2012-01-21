@@ -12,7 +12,7 @@
 # This class is not intended to be used directly.
 # It's automatically included by jenkins main class.
 # This class uses default file and exec defines to avoid more
-# Example42 dependencies (sigh)
+# Example42 dependencies (sigh)
 #
 class jenkins::repository inherits jenkins {
 
