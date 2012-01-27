@@ -150,11 +150,9 @@ describe 'jenkins' do
   describe 'Test Puppi Integration' do
     let(:params) { {:puppi => true, :puppi_helper => "myhelper"} }
 
-    it { should contain_file('puppi_jenkins').with_ensure('present') }
-    it 'should generate a valid puppi data file' do
-      content = catalogue.resource('file', 'puppi_jenkins').send(:parameters)[:content]
-      expected_lines = [ '  puppi_helper: myhelper' ]
-      (content.split("\n") & expected_lines).should == expected_lines
+    it 'should generate a puppi::ze define' do
+      content = catalogue.resource('puppi::ze', 'jenkins').send(:parameters)[:helper]
+      content.should == "myhelper"
     end
   end
 
@@ -167,12 +165,4 @@ describe 'jenkins' do
     end
   end
 
-  describe 'Test Firewall Tools Integration' do
-    let(:params) { {:firewall => true, :firewall_tool => "iptables" , :protocol => "tcp" , :port => "42" } }
-
-    it 'should generate correct firewall define' do
-      content = catalogue.resource('firewall', 'jenkins_tcp_42').send(:parameters)[:tool]
-      content.should == "iptables"
-    end
-  end
 end

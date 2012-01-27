@@ -1,5 +1,5 @@
 # jenkins::plugin based on https://github.com/rtyler/puppet-jenkins
-# To test and adapt 
+# To test and adapt
 define jenkins::plugin ( $version ='') {
 
   include jenkins::params

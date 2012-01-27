@@ -1,5 +1,5 @@
 name    'lab42-jenkins'
-version '2.0.3'
+version '2.0.4'
 author  'Alessandro Franceschi'
 license 'Apache2'
 project_page 'http://www.example42.com'

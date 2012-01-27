@@ -407,15 +407,11 @@ class jenkins (
 
   ### Provide puppi data, if enabled ( puppi => true )
   if $jenkins::bool_puppi == true {
-    $puppivars=get_class_args()
-    file { 'puppi_jenkins':
-      ensure  => $jenkins::manage_file,
-      path    => "${settings::vardir}/puppi/jenkins",
-      mode    => '0644',
-      owner   => 'root',
-      group   => 'root',
-      require => Class['puppi'],
-      content => inline_template('<%= puppivars.to_yaml %>'),
+    $classvars=get_class_args()
+    puppi::ze { 'jenkins':
+      ensure    => $jenkins::manage_file,
+      variables => $classvars,
+      helper    => $jenkins::puppi_helper,
     }
   }
 
