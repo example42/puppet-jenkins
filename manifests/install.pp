@@ -24,7 +24,7 @@ class jenkins::install inherits jenkins {
     }
 
     source: {
-      stdlib42::netinstall { 'jenkins':
+      puppi::netinstall { 'jenkins':
         url                 => $jenkins::install_source,
         destination_dir     => $jenkins::install_destination,
         extract_command     => 'rsync',

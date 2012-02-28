@@ -103,7 +103,7 @@ describe 'jenkins' do
     it { should_not contain_service('jenkins').with_enable('true') }
     it { should_not contain_file('jenkins.conf').with_ensure('present') }
     it 'should generate a netinstall define' do
-      content = catalogue.resource('stdlib42::netinstall', 'jenkins').send(:parameters)[:url]
+      content = catalogue.resource('puppi::netinstall', 'jenkins').send(:parameters)[:url]
       content.should == 'http://example42.com/jenkins.war'
     end
   end
