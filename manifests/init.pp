@@ -450,8 +450,8 @@ class jenkins (
   ### Firewall management, if enabled ( firewall => true ) and service present
   if $jenkins::bool_firewall == true and $jenkins::manage_service_standalone == true {
     firewall { "jenkins_${jenkins::protocol}_${jenkins::port}":
-      source      => $jenkins::firewall_source,
-      destination => $jenkins::firewall_destination,
+      source      => $jenkins::firewall_src,
+      destination => $jenkins::firewall_dst,
       protocol    => $jenkins::protocol,
       port        => $jenkins::port,
       action      => 'allow',
