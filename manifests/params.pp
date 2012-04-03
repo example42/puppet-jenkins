@@ -49,6 +49,11 @@ class jenkins::params {
 
   $install_postcommand = ''
 
+  $install_warfile = $::jenkins_install_warfile ? {
+    ''      => 'jenkins.war',                      # Default value
+    default => $::jenkins_install_warfile,
+  }
+
   $url_check           = ''
 
   $url_pattern         = 'OK'

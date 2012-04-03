@@ -233,6 +233,7 @@ class jenkins (
   $install_destination = $jenkins::params::install_destination,
   $install_precommand  = $jenkins::params::install_precommand,
   $install_postcommand = $jenkins::params::install_postcommand,
+  $install_warfile     = $jenkins::params::install_warfile,
   $url_check           = $jenkins::params::url_check,
   $url_pattern         = $jenkins::params::url_pattern,
   $my_class            = $jenkins::params::my_class,
