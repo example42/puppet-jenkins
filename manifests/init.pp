@@ -5,7 +5,7 @@
 #
 # == Parameters
 #
-# Standard class parameters - Define jenkins web app specific settings
+# Class specific parameters - Define jenkins web app specific settings
 #
 # [*install*]
 #   Kind of installation to attempt:
@@ -76,6 +76,11 @@
 # [*options*]
 #   An hash of custom options to be used in templates for arbitrary settings.
 #   Can be defined also by the (top scope) variable $jenkins_options
+#
+# [*service_autorestart*]
+#   Automatically restarts the foo service when there is a change in
+#   configuration files. Default: true, Set to false if you don't want to
+#   automatically restart the service.
 #
 # [*absent*]
 #   Set to 'true' to remove package(s) installed by module
@@ -173,6 +178,9 @@
 #   The name of jenkins arguments.
 #   Used only in case the jenkins process name is generic (java, ruby...)
 #
+# [*process_user*]
+#   The name of the user foo runs with. Used by puppi and monitor.
+#
 # [*config_dir*]
 #   Main configuration directory. Used by puppi
 #
@@ -228,54 +236,57 @@
 #   Alessandro Franceschi <al@lab42.it/>
 #
 class jenkins (
-  $install             = $jenkins::params::install,
-  $install_source      = $jenkins::params::install_source,
-  $install_destination = $jenkins::params::install_destination,
-  $install_precommand  = $jenkins::params::install_precommand,
-  $install_postcommand = $jenkins::params::install_postcommand,
-  $install_warfile     = $jenkins::params::install_warfile,
-  $url_check           = $jenkins::params::url_check,
-  $url_pattern         = $jenkins::params::url_pattern,
-  $my_class            = $jenkins::params::my_class,
-  $source              = $jenkins::params::source,
-  $source_dir          = $jenkins::params::source_dir,
-  $source_dir_purge    = $jenkins::params::source_dir_purge,
-  $template            = $jenkins::params::template,
-  $options             = $jenkins::params::options,
-  $absent              = $jenkins::params::absent,
-  $disable             = $jenkins::params::disable,
-  $disableboot         = $jenkins::params::disableboot,
-  $monitor             = $jenkins::params::monitor,
-  $monitor_tool        = $jenkins::params::monitor_tool,
-  $monitor_target      = $jenkins::params::monitor_target,
-  $puppi               = $jenkins::params::puppi,
-  $puppi_helper        = $jenkins::params::puppi_helper,
-  $firewall            = $jenkins::params::firewall,
-  $firewall_tool       = $jenkins::params::firewall_tool,
-  $firewall_src        = $jenkins::params::firewall_src,
-  $firewall_dst        = $jenkins::params::firewall_dst,
-  $debug               = $jenkins::params::debug,
-  $audit_only          = $jenkins::params::audit_only,
-  $package             = $jenkins::params::package,
-  $service             = $jenkins::params::service,
-  $service_status      = $jenkins::params::service_status,
-  $process             = $jenkins::params::process,
-  $process_args        = $jenkins::params::process_args,
-  $config_dir          = $jenkins::params::config_dir,
-  $config_file         = $jenkins::params::config_file,
-  $config_file_mode    = $jenkins::params::config_file_mode,
-  $config_file_owner   = $jenkins::params::config_file_owner,
-  $config_file_group   = $jenkins::params::config_file_group,
-  $config_file_init    = $jenkins::params::config_file_init,
-  $pid_file            = $jenkins::params::pid_file,
-  $data_dir            = $jenkins::params::data_dir,
-  $log_dir             = $jenkins::params::log_dir,
-  $log_file            = $jenkins::params::log_file,
-  $port                = $jenkins::params::port,
-  $protocol            = $jenkins::params::protocol
+  $install             = params_lookup( 'install' ),
+  $install_source      = params_lookup( 'install_source' ),
+  $install_destination = params_lookup( 'install_destination' ),
+  $install_precommand  = params_lookup( 'install_precommand' ),
+  $install_postcommand = params_lookup( 'install_postcommand' ),
+  $url_check           = params_lookup( 'url_check' ),
+  $url_pattern         = params_lookup( 'url_pattern' ),
+  $my_class            = params_lookup( 'my_class' ),
+  $source              = params_lookup( 'source' ),
+  $source_dir          = params_lookup( 'source_dir' ),
+  $source_dir_purge    = params_lookup( 'source_dir_purge' ),
+  $template            = params_lookup( 'template' ),
+  $service_autorestart = params_lookup( 'service_autorestart' , 'global' ),
+  $options             = params_lookup( 'options' ),
+  $version             = params_lookup( 'version' ),
+  $absent              = params_lookup( 'absent' ),
+  $disable             = params_lookup( 'disable' ),
+  $disableboot         = params_lookup( 'disableboot' ),
+  $monitor             = params_lookup( 'monitor' , 'global' ),
+  $monitor_tool        = params_lookup( 'monitor_tool' , 'global' ),
+  $monitor_target      = params_lookup( 'monitor_target' , 'global' ),
+  $puppi               = params_lookup( 'puppi' , 'global' ),
+  $puppi_helper        = params_lookup( 'puppi_helper' , 'global' ),
+  $firewall            = params_lookup( 'firewall' , 'global' ),
+  $firewall_tool       = params_lookup( 'firewall_tool' , 'global' ),
+  $firewall_src        = params_lookup( 'firewall_src' , 'global' ),
+  $firewall_dst        = params_lookup( 'firewall_dst' , 'global' ),
+  $debug               = params_lookup( 'debug' , 'global' ),
+  $audit_only          = params_lookup( 'audit_only' , 'global' ),
+  $package             = params_lookup( 'package' ),
+  $service             = params_lookup( 'service' ),
+  $service_status      = params_lookup( 'service_status' ),
+  $process             = params_lookup( 'process' ),
+  $process_args        = params_lookup( 'process_args' ),
+  $process_user        = params_lookup( 'process_user' ),
+  $config_dir          = params_lookup( 'config_dir' ),
+  $config_file         = params_lookup( 'config_file' ),
+  $config_file_mode    = params_lookup( 'config_file_mode' ),
+  $config_file_owner   = params_lookup( 'config_file_owner' ),
+  $config_file_group   = params_lookup( 'config_file_group' ),
+  $config_file_init    = params_lookup( 'config_file_init' ),
+  $pid_file            = params_lookup( 'pid_file' ),
+  $data_dir            = params_lookup( 'data_dir' ),
+  $log_dir             = params_lookup( 'log_dir' ),
+  $log_file            = params_lookup( 'log_file' ),
+  $port                = params_lookup( 'port' ),
+  $protocol            = params_lookup( 'protocol' )
   ) inherits jenkins::params {
 
   $bool_source_dir_purge=any2bool($source_dir_purge)
+  $bool_service_autorestart=any2bool($service_autorestart)
   $bool_absent=any2bool($absent)
   $bool_disable=any2bool($disable)
   $bool_disableboot=any2bool($disableboot)
@@ -310,6 +321,11 @@ class jenkins (
     },
   }
 
+  $manage_service_autorestart = $jenkins::bool_service_autorestart ? {
+    true    => Service[jenkins],
+    false   => undef,
+  }
+
   # We assume that is installed via package, jenkins has an indipendent service
   $manage_service_standalone = $jenkins::install ? {
     package => true,
@@ -321,13 +337,16 @@ class jenkins (
     default => 'present',
   }
 
-  if $jenkins::bool_absent == true or $jenkins::bool_disable == true or $jenkins::bool_disableboot == true {
+  if $jenkins::bool_absent == true
+  or $jenkins::bool_disable == true
+  or $jenkins::bool_disableboot == true {
     $manage_monitor = false
   } else {
     $manage_monitor = true
   }
 
-  if $jenkins::bool_absent == true or $jenkins::bool_disable == true {
+  if $jenkins::bool_absent == true
+  or $jenkins::bool_disable == true {
     $manage_firewall = false
   } else {
     $manage_firewall = true
@@ -357,7 +376,9 @@ class jenkins (
   # Installation is managed in dedicated class
   require jenkins::install
 
-  if $jenkins::source or $jenkins::template or $jenkins::install == 'package' {
+  if $jenkins::source
+  or $jenkins::template
+  or $jenkins::install == 'package' {
     file { 'jenkins.conf':
       ensure  => $jenkins::manage_file,
       path    => $jenkins::config_file,
@@ -365,6 +386,7 @@ class jenkins (
       owner   => $jenkins::config_file_owner,
       group   => $jenkins::config_file_group,
       require => Class['jenkins::install'],
+      notify  => $jenkins::manage_service_autorestart,
       source  => $jenkins::manage_file_source,
       content => $jenkins::manage_file_content,
       replace => $jenkins::manage_file_replace,
@@ -378,6 +400,7 @@ class jenkins (
       ensure  => directory,
       path    => $jenkins::config_dir,
       require => Class['jenkins::install'],
+      notify  => $jenkins::manage_service_autorestart,
       source  => $source_dir,
       recurse => true,
       purge   => $source_dir_purge,
@@ -418,7 +441,8 @@ class jenkins (
 
 
   ### Service monitoring, if enabled ( monitor => true )
-  if $jenkins::bool_monitor == true and $jenkins::url_check != '' {
+  if $jenkins::bool_monitor == true
+  and $jenkins::url_check != '' {
     monitor::url { 'jenkins_url':
       url     => $jenkins::url_check,
       pattern => $jenkins::url_pattern,
@@ -430,7 +454,8 @@ class jenkins (
   }
 
   ### Service monitoring, if enabled ( monitor => true ) and present
-  if $jenkins::bool_monitor == true and $jenkins::manage_service_standalone == true {
+  if $jenkins::bool_monitor == true
+  and $jenkins::manage_service_standalone == true {
     monitor::port { "jenkins_${jenkins::protocol}_${jenkins::port}":
       protocol => $jenkins::protocol,
       port     => $jenkins::port,
@@ -442,6 +467,7 @@ class jenkins (
       process  => $jenkins::process,
       service  => $jenkins::service,
       pidfile  => $jenkins::pid_file,
+      user     => $jenkins::process_user,
       tool     => $jenkins::monitor_tool,
       enable   => $jenkins::manage_monitor,
     }
@@ -449,7 +475,8 @@ class jenkins (
 
 
   ### Firewall management, if enabled ( firewall => true ) and service present
-  if $jenkins::bool_firewall == true and $jenkins::manage_service_standalone == true {
+  if $jenkins::bool_firewall == true
+  and $jenkins::manage_service_standalone == true {
     firewall { "jenkins_${jenkins::protocol}_${jenkins::port}":
       source      => $jenkins::firewall_src,
       destination => $jenkins::firewall_dst,
