@@ -41,6 +41,8 @@ class jenkins::install inherits jenkins {
         postdeploy_customcommand => $jenkins::install_postcommand,
         report_email             => 'root',
         auto_deploy              => true,
+        check_deploy             => false,
+        run_checks               => false,
         enable                   => true,
       }
     }
