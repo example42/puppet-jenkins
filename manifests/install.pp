@@ -27,6 +27,7 @@ class jenkins::install inherits jenkins {
       puppi::netinstall { 'jenkins':
         url                 => $jenkins::install_source,
         destination_dir     => $jenkins::install_destination,
+        extracted_dir       => $jenkins::install_warfile,
         extract_command     => 'rsync',
         preextract_command  => $jenkins::install_precommand,
         postextract_command => $jenkins::install_postcommand,
