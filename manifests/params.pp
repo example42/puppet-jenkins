@@ -66,11 +66,11 @@ class jenkins::params {
   }
 
   $process = $::operatingsystem ? {
-    default => 'jenkins',
+    default => 'java',
   }
 
   $process_args = $::operatingsystem ? {
-    default => '',
+    default => 'jenkins',
   }
 
   $config_dir = $::operatingsystem ? {
