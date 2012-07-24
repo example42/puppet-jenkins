@@ -403,7 +403,7 @@ class jenkins (
       notify  => $jenkins::manage_service_autorestart,
       source  => $source_dir,
       recurse => true,
-      purge   => $source_dir_purge,
+      purge   => $jenkins::bool_source_dir_purge,
       replace => $jenkins::manage_file_replace,
       audit   => $jenkins::manage_audit,
     }
