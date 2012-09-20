@@ -14,6 +14,8 @@
 #
 class jenkins::params {
 
+  $osver = split($::operatingsystemrelease, '[.]')
+
   # Default installation type depends on OS package availability
   $install = 'package'
 
@@ -27,12 +29,12 @@ class jenkins::params {
   # provide as an argument a different install_destination
   $tomcatpackageversion = $::operatingsystem ? {
     ubuntu                          => 'tomcat6',
-    debian                          => $stdlib42::osver ? {
+    debian                          => $osver[0] ? {
       5       => 'tomcat5.5',
       6       => 'tomcat6',
       default => 'tomcat6',
     },
-    /(?i:CentOS|RedHat|Scientific)/ => $stdlib42::osver ? {
+    /(?i:CentOS|RedHat|Scientific)/ => $osver[0] ? {
       5       => 'tomcat5',
       6       => 'tomcat6',
       default => 'tomcat6',
