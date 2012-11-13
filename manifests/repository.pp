@@ -34,9 +34,10 @@ class jenkins::repository inherits jenkins {
         path    => '/bin:/usr/bin',
       }
       exec { 'aptget_update_jenkins':
-        command   => 'apt-get update',
-        subscribe => File['jenkins.list'],
-        path      => '/bin:/usr/bin',
+        command     => 'apt-get update',
+        refreshonly => true,
+        subscribe   => File['jenkins.list'],
+        path        => '/bin:/usr/bin',
       }
 
     }
