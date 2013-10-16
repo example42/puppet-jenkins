@@ -102,7 +102,8 @@ class jenkins::params {
   }
 
   $pid_file = $::operatingsystem ? {
-    default => '/var/run/jenkins.pid',
+    /(?i:Debian|Ubuntu|Mint)/ => '/var/run/jenkins/jenkins.pid',
+    default                   => '/var/run/jenkins.pid',
   }
 
   $data_dir = $::operatingsystem ? {
