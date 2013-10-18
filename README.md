@@ -45,7 +45,7 @@ For detailed info about the logic and usage patterns of Example42 modules check 
           absent => true
         }
 
-* Enable auditing without without making changes on existing jenkins configuration files
+* Enable auditing without making changes on existing jenkins configuration files
 
         class { 'jenkins':
           audit_only => true
