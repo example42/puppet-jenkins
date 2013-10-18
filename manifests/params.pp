@@ -42,7 +42,7 @@ class jenkins::params {
     default                         => 'tomcat',
   }
 
-  $install_destination = "/var/lib/$jenkins::params::tomcatpackageversion/webapps"
+  $install_destination = "/var/lib/${jenkins::params::tomcatpackageversion}/webapps"
 
   $install_precommand  = ''
 
