@@ -16,7 +16,6 @@ class jenkins::install inherits jenkins {
   case $jenkins::install {
 
     package: {
-      require jenkins::repository
       package { 'jenkins':
         ensure => $jenkins::manage_package,
         name   => $jenkins::package,
