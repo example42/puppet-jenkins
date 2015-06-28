@@ -1,5 +1,13 @@
 # Puppet module: jenkins
 
+## DEPRECATION NOTICE
+This module is no more actively maintained and will hardly be updated.
+
+Please find an alternative module from other authors or consider [Tiny Puppet](https://github.com/example42/puppet-tp) as replacement.
+
+If you want to maintain this module, contact [Alessandro Franceschi](https://github.com/alvagante)
+
+
 This is a Puppet module for jenkins based on the second generation layout ("NextGen") of Example42 Puppet Modules.
 
 Made by Alessandro Franceschi / Lab42
