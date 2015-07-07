@@ -13,6 +13,7 @@
 # It may be imported or inherited by other classes
 #
 class jenkins::params {
+  $install_prerequisites = true
 
   $osver = split($::operatingsystemrelease, '[.]')
 
@@ -42,7 +43,7 @@ class jenkins::params {
     default                         => 'tomcat',
   }
 
-  $install_destination = "/var/lib/$jenkins::params::tomcatpackageversion/webapps"
+  $install_destination = "/var/lib/${jenkins::params::tomcatpackageversion}/webapps"
 
   $install_precommand  = ''
 
@@ -67,6 +68,10 @@ class jenkins::params {
     default => true,
   }
 
+  $lts = $::operatingsystem ? {
+    default => false,
+  }
+
   $process = $::operatingsystem ? {
     default => 'java',
   }
@@ -89,11 +94,11 @@ class jenkins::params {
   }
 
   $config_file_owner = $::operatingsystem ? {
-    default => 'root',
+    default => 'jenkins',
   }
 
   $config_file_group = $::operatingsystem ? {
-    default => 'root',
+    default => 'jenkins',
   }
 
   $config_file_init = $::operatingsystem ? {
@@ -107,7 +112,7 @@ class jenkins::params {
   }
 
   $data_dir = $::operatingsystem ? {
-    default => '/etc/jenkins',
+    default => '/var/lib/jenkins',
   }
 
   $log_dir = $::operatingsystem ? {
@@ -148,5 +153,5 @@ class jenkins::params {
   $puppi_helper = 'standard'
   $debug = false
   $audit_only = false
-
+  $plugin_hash = {}
 }

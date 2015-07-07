@@ -7,6 +7,12 @@
 #
 # Class specific parameters - Define jenkins web app specific settings
 #
+# [*install_prerequisites*]
+#   Set to false if you don't want install this module's prerequisites.
+#   (It may be useful if the resources provided the prerequisites are already
+#   managed by some other modules). Default: true
+#   Prerequisites are based on Example42 modules set.
+#
 # [*install*]
 #   Kind of installation to attempt:
 #     - package : Installs jenkins using the OS common packages
@@ -236,55 +242,59 @@
 #   Alessandro Franceschi <al@lab42.it/>
 #
 class jenkins (
-  $install             = params_lookup( 'install' ),
-  $install_source      = params_lookup( 'install_source' ),
-  $install_destination = params_lookup( 'install_destination' ),
-  $install_precommand  = params_lookup( 'install_precommand' ),
-  $install_postcommand = params_lookup( 'install_postcommand' ),
-  $url_check           = params_lookup( 'url_check' ),
-  $url_pattern         = params_lookup( 'url_pattern' ),
-  $my_class            = params_lookup( 'my_class' ),
-  $source              = params_lookup( 'source' ),
-  $source_dir          = params_lookup( 'source_dir' ),
-  $source_dir_purge    = params_lookup( 'source_dir_purge' ),
-  $template            = params_lookup( 'template' ),
-  $service_autorestart = params_lookup( 'service_autorestart' , 'global' ),
-  $options             = params_lookup( 'options' ),
-  $version             = params_lookup( 'version' ),
-  $absent              = params_lookup( 'absent' ),
-  $disable             = params_lookup( 'disable' ),
-  $disableboot         = params_lookup( 'disableboot' ),
-  $monitor             = params_lookup( 'monitor' , 'global' ),
-  $monitor_tool        = params_lookup( 'monitor_tool' , 'global' ),
-  $monitor_target      = params_lookup( 'monitor_target' , 'global' ),
-  $puppi               = params_lookup( 'puppi' , 'global' ),
-  $puppi_helper        = params_lookup( 'puppi_helper' , 'global' ),
-  $firewall            = params_lookup( 'firewall' , 'global' ),
-  $firewall_tool       = params_lookup( 'firewall_tool' , 'global' ),
-  $firewall_src        = params_lookup( 'firewall_src' , 'global' ),
-  $firewall_dst        = params_lookup( 'firewall_dst' , 'global' ),
-  $debug               = params_lookup( 'debug' , 'global' ),
-  $audit_only          = params_lookup( 'audit_only' , 'global' ),
-  $package             = params_lookup( 'package' ),
-  $service             = params_lookup( 'service' ),
-  $service_status      = params_lookup( 'service_status' ),
-  $process             = params_lookup( 'process' ),
-  $process_args        = params_lookup( 'process_args' ),
-  $process_user        = params_lookup( 'process_user' ),
-  $config_dir          = params_lookup( 'config_dir' ),
-  $config_file         = params_lookup( 'config_file' ),
-  $config_file_mode    = params_lookup( 'config_file_mode' ),
-  $config_file_owner   = params_lookup( 'config_file_owner' ),
-  $config_file_group   = params_lookup( 'config_file_group' ),
-  $config_file_init    = params_lookup( 'config_file_init' ),
-  $pid_file            = params_lookup( 'pid_file' ),
-  $data_dir            = params_lookup( 'data_dir' ),
-  $log_dir             = params_lookup( 'log_dir' ),
-  $log_file            = params_lookup( 'log_file' ),
-  $port                = params_lookup( 'port' ),
-  $protocol            = params_lookup( 'protocol' )
+  $install_prerequisites = params_lookup( 'install_prerequisites' ),
+  $install               = params_lookup( 'install' ),
+  $install_source        = params_lookup( 'install_source' ),
+  $install_destination   = params_lookup( 'install_destination' ),
+  $install_precommand    = params_lookup( 'install_precommand' ),
+  $install_postcommand   = params_lookup( 'install_postcommand' ),
+  $url_check             = params_lookup( 'url_check' ),
+  $url_pattern           = params_lookup( 'url_pattern' ),
+  $lts                   = params_lookup( 'lts' ),
+  $my_class              = params_lookup( 'my_class' ),
+  $source                = params_lookup( 'source' ),
+  $source_dir            = params_lookup( 'source_dir' ),
+  $source_dir_purge      = params_lookup( 'source_dir_purge' ),
+  $template              = params_lookup( 'template' ),
+  $service_autorestart   = params_lookup( 'service_autorestart' , 'global' ),
+  $options               = params_lookup( 'options' ),
+  $version               = params_lookup( 'version' ),
+  $absent                = params_lookup( 'absent' ),
+  $disable               = params_lookup( 'disable' ),
+  $disableboot           = params_lookup( 'disableboot' ),
+  $monitor               = params_lookup( 'monitor' , 'global' ),
+  $monitor_tool          = params_lookup( 'monitor_tool' , 'global' ),
+  $monitor_target        = params_lookup( 'monitor_target' , 'global' ),
+  $puppi                 = params_lookup( 'puppi' , 'global' ),
+  $puppi_helper          = params_lookup( 'puppi_helper' , 'global' ),
+  $firewall              = params_lookup( 'firewall' , 'global' ),
+  $firewall_tool         = params_lookup( 'firewall_tool' , 'global' ),
+  $firewall_src          = params_lookup( 'firewall_src' , 'global' ),
+  $firewall_dst          = params_lookup( 'firewall_dst' , 'global' ),
+  $debug                 = params_lookup( 'debug' , 'global' ),
+  $audit_only            = params_lookup( 'audit_only' , 'global' ),
+  $package               = params_lookup( 'package' ),
+  $service               = params_lookup( 'service' ),
+  $service_status        = params_lookup( 'service_status' ),
+  $process               = params_lookup( 'process' ),
+  $process_args          = params_lookup( 'process_args' ),
+  $process_user          = params_lookup( 'process_user' ),
+  $config_dir            = params_lookup( 'config_dir' ),
+  $config_file           = params_lookup( 'config_file' ),
+  $config_file_mode      = params_lookup( 'config_file_mode' ),
+  $config_file_owner     = params_lookup( 'config_file_owner' ),
+  $config_file_group     = params_lookup( 'config_file_group' ),
+  $config_file_init      = params_lookup( 'config_file_init' ),
+  $pid_file              = params_lookup( 'pid_file' ),
+  $data_dir              = params_lookup( 'data_dir' ),
+  $log_dir               = params_lookup( 'log_dir' ),
+  $log_file              = params_lookup( 'log_file' ),
+  $port                  = params_lookup( 'port' ),
+  $protocol              = params_lookup( 'protocol' ),
+  $plugin_hash           = params_lookup( 'plugin_hash' ),
   ) inherits jenkins::params {
 
+  $bool_install_prerequisites=any2bool($install_prerequisites)
   $bool_source_dir_purge=any2bool($source_dir_purge)
   $bool_service_autorestart=any2bool($service_autorestart)
   $bool_absent=any2bool($absent)
@@ -295,6 +305,12 @@ class jenkins (
   $bool_firewall=any2bool($firewall)
   $bool_debug=any2bool($debug)
   $bool_audit_only=any2bool($audit_only)
+
+  ## Integration with Hiera
+  if $plugin_hash != {} {
+    validate_hash($plugin_hash)
+    create_resources('jenkins::plugin', $plugin_hash)
+  }
 
   ### Definition of some variables used in the module
   $manage_package = $jenkins::bool_absent ? {
@@ -372,8 +388,14 @@ class jenkins (
     default   => template($jenkins::template),
   }
 
+
   ### Managed resources
   # Installation is managed in dedicated class
+  if $jenkins::bool_install_prerequisites {
+    class { 'jenkins::prerequisites':
+    }
+  }
+
   require jenkins::install
 
   if $jenkins::source
@@ -412,13 +434,13 @@ class jenkins (
   # Service is managed only if jenkins package provides it
   if $jenkins::manage_service_standalone == true {
     service { 'jenkins':
-      ensure     => $jenkins::manage_service_ensure,
-      name       => $jenkins::service,
-      enable     => $jenkins::manage_service_enable,
-      hasstatus  => $jenkins::service_status,
-      pattern    => $jenkins::process,
-      require    => Package['jenkins'],
-      subscribe  => File['jenkins.conf'],
+      ensure    => $jenkins::manage_service_ensure,
+      name      => $jenkins::service,
+      enable    => $jenkins::manage_service_enable,
+      hasstatus => $jenkins::service_status,
+      pattern   => $jenkins::process,
+      require   => Package['jenkins'],
+      subscribe => File['jenkins.conf'],
     }
   }
 
@@ -464,12 +486,12 @@ class jenkins (
       enable   => $jenkins::manage_monitor,
     }
     monitor::process { 'jenkins_process':
-      process  => $jenkins::process,
-      service  => $jenkins::service,
-      pidfile  => $jenkins::pid_file,
-      user     => $jenkins::process_user,
-      tool     => $jenkins::monitor_tool,
-      enable   => $jenkins::manage_monitor,
+      process => $jenkins::process,
+      service => $jenkins::service,
+      pidfile => $jenkins::pid_file,
+      user    => $jenkins::process_user,
+      tool    => $jenkins::monitor_tool,
+      enable  => $jenkins::manage_monitor,
     }
   }
 
